@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -17,21 +19,22 @@ services:
     ports:
       - "6379:6379"
 
-frontend:
+  frontend:
     build: ./frontend
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      NEXT_PUBLIC_API_URL: http://localhost:8080
     depends_on:
       - backend
+
   backend:
     build: ./backend
     restart: unless-stopped
     environment:
-      - DB_URL=postgres://ruang_user:ruang_password@postgres:5432/ruang_db
-      - REDIS_URL=redis://redis:6379
-      - PINATA_JWT=${PINATA_JWT}
+      DB_URL: postgres://ruang_user:ruang_password@postgres:5432/ruang_db
+      REDIS_URL: redis://redis:6379
+      PINATA_JWT: ${PINATA_JWT}
     ports:
       - "8080:8080"
     depends_on:
